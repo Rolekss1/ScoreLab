@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { useAdmin } from '../lib/useAdmin';
@@ -54,6 +54,63 @@ export default function Comments({ courseId, lessonId, lessonTitle }: CommentsPr
 
   const [sort, setSort] = useState<SortKey>('new');
   const [rulesOpen, setRulesOpen] = useState(false);
+
+  const listRef = useRef<HTMLDivElement>(null);
+  const [listHeight, setListHeight] = useState<number | null>(null);
+  const [resizing, setResizing] = useState(false);
+
+  const handleResizeStart = (e: React.MouseEvent<HTMLDivElement>) => {
+    const target = e.target as HTMLElement;
+    if (target.closest('button, select')) return; // let normal controls work
+    e.preventDefault();
+
+    const listEl = listRef.current;
+    const cmEl = listEl?.closest('.cm') as HTMLElement | null;
+    const sidebarEl = listEl?.closest('.course-player__sidebar') as HTMLElement | null;
+    const modulesEl = sidebarEl?.querySelector('.playlist-modules') as HTMLElement | null;
+    const headerEl = sidebarEl?.querySelector('.playlist-header') as HTMLElement | null;
+    if (!listEl || !cmEl || !modulesEl) return;
+
+    const startY = e.clientY;
+    const startListHeight = listEl.getBoundingClientRect().height;
+
+    // Everything derived here comes from the viewport and from currently-fixed
+    // chrome (header, comment bar/composer) — never from the modules/list
+    // panes themselves — so the same drag always lands on the same numbers,
+    // no matter what state (or screen size) it started from.
+    const sidebarCap = window.innerHeight * 0.8; // matches .course-player__sidebar's max-height: 80vh
+    const headerHeight = headerEl?.getBoundingClientRect().height ?? 0;
+    const cmChromeHeight = cmEl.getBoundingClientRect().height - startListHeight; // bar + composer/login
+    const totalBudget = Math.max(sidebarCap - headerHeight - cmChromeHeight, 200);
+
+    // The floor sits close to the natural default size — shrinking further
+    // than that looked unnaturally cramped, so the drag-down range is short.
+    const minList = totalBudget * 0.45;
+    const maxList = totalBudget * 0.75;
+    const minModules = totalBudget * 0.15;
+
+    document.body.style.userSelect = 'none';
+    setResizing(true);
+
+    const handleMove = (ev: MouseEvent) => {
+      const dy = ev.clientY - startY; // dragging down (positive) shrinks the list
+      const rawList = startListHeight - dy;
+      const clampedList = Math.min(Math.max(rawList, minList), maxList);
+      const modulesHeight = Math.max(totalBudget - clampedList, minModules);
+      const finalList = totalBudget - modulesHeight; // keep the pair summing to the fixed budget
+
+      setListHeight(finalList);
+      modulesEl.style.maxHeight = `${modulesHeight}px`;
+    };
+    const handleUp = () => {
+      document.body.style.userSelect = '';
+      setResizing(false);
+      window.removeEventListener('mousemove', handleMove);
+      window.removeEventListener('mouseup', handleUp);
+    };
+    window.addEventListener('mousemove', handleMove);
+    window.addEventListener('mouseup', handleUp);
+  };
 
   const [reportingId, setReportingId] = useState<string | null>(null);
   const [reportReason, setReportReason] = useState('');
@@ -217,6 +274,11 @@ export default function Comments({ courseId, lessonId, lessonTitle }: CommentsPr
 
   return (
     <div className="cm">
+      <div
+        className={`cm__resize-handle${resizing ? ' cm__resize-handle--active' : ''}`}
+        onMouseDown={handleResizeStart}
+        title="Przeciągnij, aby zmienić rozmiar listy komentarzy"
+      />
       <div className="cm__bar">
         <span className="cm__title" title={lessonTitle}>💬 Komentarze <span className="cm__count">{comments.length}</span></span>
         <button className="cm__rules-btn" onClick={() => setRulesOpen(o => !o)}>ⓘ Zasady</button>
@@ -275,7 +337,7 @@ export default function Comments({ courseId, lessonId, lessonTitle }: CommentsPr
       ) : sorted.length === 0 ? (
         <div className="cm__empty">Brak komentarzy. Bądź pierwszy!</div>
       ) : (
-        <div className="cm__list">
+        <div className="cm__list" ref={listRef} style={listHeight != null ? { maxHeight: `${listHeight}px` } : undefined}>
           {sorted.map(c => {
             const p = profiles[c.user_id];
             const role = roleOf(p);

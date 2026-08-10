@@ -10,6 +10,8 @@ import Pricing from './components/Pricing'
 import Courses from './components/Courses'
 import CoursePlayer from './components/CoursePlayer'
 import HowItWorksPage from './components/HowItWorksPage'
+import OpinionsPage from './components/OpinionsPage'
+import GeneratorPage from './components/GeneratorPage'
 import logoFull from './assets/Zasob1.svg'
 import logoSmall from './assets/ScoreLabSmall.png'
 import Settings from './components/Settings'
@@ -25,7 +27,6 @@ function Navbar({ user, isSettingsPage, isPremium, isAdmin, avatarUrl, displayNa
   const navigate = useNavigate()
 
   const isHomePage = location.pathname === '/'
-  const sectionHref = (sectionId: string) => (isHomePage ? `#${sectionId}` : `/#${sectionId}`)
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -74,7 +75,8 @@ function Navbar({ user, isSettingsPage, isPremium, isAdmin, avatarUrl, displayNa
           <div className="navbar__nav">
             <Link to="/kursy">Kursy</Link>
             <Link to="/jak-to-dziala">Jak to działa</Link>
-            <a href={sectionHref('opinie')}>Opinie</a>
+            <Link to="/opinie">Opinie</Link>
+            <Link to="/generator">Generator AI 👑</Link>
             <Link to="/wip" className="navbar__support-link" style={{ color: 'var(--blue-light)', fontWeight: 700 }}>Wesprzyj</Link>
           </div>
         )}
@@ -173,7 +175,8 @@ function Navbar({ user, isSettingsPage, isPremium, isAdmin, avatarUrl, displayNa
               <Link to="/kursy" onClick={closeMenu}>Kursy</Link>
               <Link to="/jak-to-dziala" onClick={closeMenu}>Jak to działa</Link>
               <Link to="/cennik" onClick={closeMenu}>Cennik</Link>
-              <a href={sectionHref('opinie')} onClick={closeMenu}>Opinie</a>
+              <Link to="/opinie" onClick={closeMenu}>Opinie</Link>
+              <Link to="/generator" onClick={closeMenu}>Generator AI 👑</Link>
               <Link to="/wip" onClick={closeMenu} style={{ color: 'var(--blue-light)' }}>Wesprzyj</Link>
             </>
           )}
@@ -466,116 +469,6 @@ function Bento() {
   )
 }
 
-/* ── Testimonials ──────────────────────────────────────────── */
-const testimonials = [
-  {
-    stars: 5,
-    text: '„Zacząłem od poziomu podstawowego i po 3 miesiącach z ScoreLab napisałem maturę na 92%. Polecam każdemu, kto nie lubi się uczyć z podręcznika."',
-    initials: 'MK',
-    name: 'Mateusz K.',
-    meta: 'Matura 2024 · 92%',
-  },
-  {
-    stars: 5,
-    text: '„Wreszcie ktoś wytłumaczył funkcje tak, żebym rozumiała. Lekcje są krótkie i konkretne, nie tracę czasu na zbędną teorię. Świetna platforma!"',
-    initials: 'ZN',
-    name: 'Zofia N.',
-    meta: 'Matura 2024 · 88%',
-  },
-  {
-    stars: 5,
-    text: '„Arkusze CKE z omówieniem to strzał w dziesiątkę. Przed maturą robiłam po jednym dziennie i dokładnie wiedziałam, czego się spodziewać na egzaminie."',
-    initials: 'AP',
-    name: 'Aleksandra P.',
-    meta: 'Matura 2024 · 96%',
-  },
-  {
-    stars: 5,
-    text: '„Bardzo podoba mi się przejrzysty interfejs i system śledzenia postępów. Dzięki temu wiedziałem, na czym muszę się jeszcze skupić."',
-    initials: 'JK',
-    name: 'Jan K.',
-    meta: 'Matura 2024 · 90%',
-  },
-  {
-    stars: 4,
-    text: '„Super sprawa z tymi krótkimi wideo. Mogłem uczyć się w drodze do szkoły. Zdecydowanie polecam każdemu maturzyście!"',
-    initials: 'PW',
-    name: 'Piotr W.',
-    meta: 'Matura 2024 · 84%',
-  },
-  {
-    stars: 5,
-    text: '„Zawsze miałam problem z prawdopodobieństwem, ale po przerobieniu tego działu na ScoreLab nagle wszystko stało się logiczne."',
-    initials: 'KW',
-    name: 'Karolina W.',
-    meta: 'Matura 2024 · 98%',
-  },
-  {
-    stars: 5,
-    text: '„Nie wierzyłem, że można się tak dobrze przygotować do matury przez internet. A jednak! Dziękuję całej ekipie ScoreLab."',
-    initials: 'MD',
-    name: 'Michał D.',
-    meta: 'Matura 2024 · 100%',
-  },
-  {
-    stars: 5,
-    text: '„Najlepsza inwestycja przed maturą. Zamiast wydawać fortunę na korepetycje, miałam dostęp do świetnych materiałów 24/7."',
-    initials: 'AL',
-    name: 'Anna L.',
-    meta: 'Matura 2024 · 94%',
-  }
-]
-
-function Testimonials() {
-  return (
-    <section className="testimonials" id="opinie">
-      <div className="container">
-        <div className="testimonials__header">
-          <div className="section-label">Opinie</div>
-          <h2 className="section-title">Mówią o nas uczniowie</h2>
-          <p className="section-subtitle">Ponad 2 400 osób zdało maturę z pomocą ScoreLab. Oto, co o nas mówią.</p>
-        </div>
-        <div className="testimonials__slider">
-          <div className="testimonials__group">
-            {testimonials.map(t => (
-              <div key={t.name} className="testimonial-card">
-                <div className="testimonial-card__stars">
-                  {Array.from({ length: t.stars }).map((_, i) => <span key={i}>⭐</span>)}
-                </div>
-                <p className="testimonial-card__text">{t.text}</p>
-                <div className="testimonial-card__author">
-                  <div className="testimonial-card__avatar">{t.initials}</div>
-                  <div>
-                    <div className="testimonial-card__name">{t.name}</div>
-                    <div className="testimonial-card__meta">{t.meta}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="testimonials__group" aria-hidden="true">
-            {testimonials.map(t => (
-              <div key={`${t.name}-copy`} className="testimonial-card">
-                <div className="testimonial-card__stars">
-                  {Array.from({ length: t.stars }).map((_, i) => <span key={i}>⭐</span>)}
-                </div>
-                <p className="testimonial-card__text">{t.text}</p>
-                <div className="testimonial-card__author">
-                  <div className="testimonial-card__avatar">{t.initials}</div>
-                  <div>
-                    <div className="testimonial-card__name">{t.name}</div>
-                    <div className="testimonial-card__meta">{t.meta}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-    </section>
-  )
-}
-
 /* ── FAQ ───────────────────────────────────────────────────── */
 const faqData = [
   {
@@ -675,8 +568,8 @@ function Footer() {
           <div>
             <div className="footer__col-title">Kursy</div>
             <ul className="footer__links">
-              <li><a href="#">Matematyka — Podstawa</a></li>
-              <li><a href="#">Matematyka — Rozszerzenie</a></li>
+              <li><Link to="/kursy/matematyka">Matematyka — Podstawa</Link></li>
+              <li><Link to="/kursy/matematyka">Matematyka — Rozszerzenie</Link></li>
               <li><a href="#">Arkusze CKE</a></li>
               <li><a href="#">Więcej wkrótce…</a></li>
             </ul>
@@ -684,8 +577,9 @@ function Footer() {
           <div>
             <div className="footer__col-title">Platforma</div>
             <ul className="footer__links">
-              <li><a href="#">Jak to działa</a></li>
-              <li><a href="#">Cennik</a></li>
+              <li><Link to="/jak-to-dziala">Jak to działa</Link></li>
+              <li><Link to="/opinie">Opinie</Link></li>
+              <li><Link to="/wip">Wesprzyj</Link></li>
               <li><a href="#">Dla szkół</a></li>
               <li><a href="#">Blog</a></li>
             </ul>
@@ -742,7 +636,6 @@ export default function App() {
             <Hero user={user} />
             <Features />
             <Bento />
-            <Testimonials />
             <FAQ />
             <CTABanner user={user} />
             <Footer />
@@ -801,6 +694,25 @@ export default function App() {
             <Navbar user={user} isPremium={premium.isPremium} isAdmin={admin.isAdmin} avatarUrl={avatarUrl} displayName={displayName} />
             <HowItWorksPage />
             <Footer />
+          </>
+        }
+      />
+      <Route
+        path="/opinie"
+        element={
+          <>
+            <Navbar user={user} isPremium={premium.isPremium} isAdmin={admin.isAdmin} avatarUrl={avatarUrl} displayName={displayName} />
+            <OpinionsPage />
+            <Footer />
+          </>
+        }
+      />
+      <Route
+        path="/generator"
+        element={
+          <>
+            <Navbar user={user} isPremium={premium.isPremium} isAdmin={admin.isAdmin} avatarUrl={avatarUrl} displayName={displayName} />
+            <GeneratorPage />
           </>
         }
       />

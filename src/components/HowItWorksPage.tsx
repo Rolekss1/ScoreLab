@@ -1,5 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { usePremium } from '../lib/usePremium';
+import { useAdmin } from '../lib/useAdmin';
 import './HowItWorksPage.css'; // Dodamy nowe style tutaj
 
 /* ── How it works (przeniesione z App.tsx) ───────────────────────── */
@@ -73,8 +76,36 @@ function PlatformMission() {
   )
 }
 
+/* ── Results / Social Proof ──────────────────────────────────────── */
+const results = [
+  { value: '2 400+', label: 'Uczniów korzysta z platformy' },
+  { value: '98%', label: 'Zdawalność wśród naszych uczniów' },
+  { value: '94%', label: 'Średni wynik na maturze' },
+  { value: '4.9★', label: 'Średnia ocena od uczniów' },
+]
+
+function Results() {
+  return (
+    <section className="results-section">
+      <div className="container">
+        <div className="section-label">Liczby</div>
+        <h2 className="section-title">Efekty mówią<br />same za siebie</h2>
+        <p className="section-subtitle">Nie musisz wierzyć nam na słowo — zobacz, jak realnie wygląda nauka na ScoreLab.</p>
+        <div className="results__grid">
+          {results.map(r => (
+            <div key={r.label} className="results-stat">
+              <div className="results-stat__value">{r.value}</div>
+              <div className="results-stat__label">{r.label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
 /* ── AI Exam Generator ─────────────────────────────────────────── */
-function AIExamGenerator() {
+function AIExamGenerator({ hasGeneratorAccess }: { hasGeneratorAccess: boolean }) {
   return (
     <section className="ai-generator-section">
       <div className="container">
@@ -130,7 +161,11 @@ function AIExamGenerator() {
                 </div>
               </li>
             </ul>
-            <Link to="/cennik" className="btn btn-blue" style={{ marginTop: '24px' }}>Sprawdź Premium</Link>
+            {hasGeneratorAccess ? (
+              <Link to="/generator" className="btn btn-blue" style={{ marginTop: '24px' }}>Otwórz generator →</Link>
+            ) : (
+              <Link to="/cennik" className="btn btn-blue" style={{ marginTop: '24px' }}>Sprawdź Premium</Link>
+            )}
           </div>
         </div>
       </div>
@@ -140,15 +175,23 @@ function AIExamGenerator() {
 
 /* ── Main Page Component ───────────────────────────────────────── */
 export default function HowItWorksPage() {
+  const [userId, setUserId] = useState<string | undefined>(undefined);
+  const premium = usePremium(userId);
+  const admin = useAdmin(userId);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUserId(session?.user?.id);
+    });
   }, []);
 
   return (
     <div className="how-it-works-page">
       <PlatformMission />
       <HowItWorks />
-      <AIExamGenerator />
+      <Results />
+      <AIExamGenerator hasGeneratorAccess={premium.isPremium || admin.isAdmin} />
     </div>
   )
 }

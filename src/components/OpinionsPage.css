@@ -1,0 +1,245 @@
+/* ── Opinions Page Styles ─────────────────────────────────────── */
+
+/* SUCCESS STORIES */
+.success-stories {
+  padding: 160px 0 100px;
+  background: var(--surface-alt);
+}
+
+.success-stories .section-label {
+  background: var(--white);
+}
+
+.success-stories__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+  margin-top: var(--space-12);
+}
+
+.success-card {
+  position: relative;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.success-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--blue-light), #22c55e);
+}
+
+.success-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(155, 202, 242, 0.4);
+  box-shadow: 0 16px 34px rgba(0, 0, 0, 0.08);
+}
+
+.success-card__badge {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+  background: rgba(34, 197, 94, 0.12);
+  color: #16a34a;
+  font-size: var(--text-xs);
+  font-weight: 800;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  letter-spacing: 0.02em;
+}
+
+.success-card__header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+}
+
+.success-card__avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-light) 0%, #6aaee8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--black);
+  flex-shrink: 0;
+}
+
+.success-card__name {
+  font-weight: 700;
+  color: var(--black);
+}
+
+.success-card__tag {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+.success-card__scores {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  margin-bottom: var(--space-3);
+}
+
+.success-card__score {
+  display: flex;
+  flex-direction: column;
+}
+
+.success-card__score-value {
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--text-secondary);
+  line-height: 1;
+}
+
+.success-card__score--after .success-card__score-value {
+  color: #16a34a;
+}
+
+.success-card__score-label {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.success-card__arrow {
+  color: var(--text-secondary);
+  font-size: var(--text-lg);
+}
+
+.success-card__bar {
+  position: relative;
+  height: 8px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--space-6);
+}
+
+.success-card__bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-radius: var(--radius-full);
+}
+
+.success-card__bar-fill--before {
+  background: var(--border);
+}
+
+.success-card__quote {
+  position: relative;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-style: italic;
+  margin: 0;
+  padding-left: var(--space-2);
+}
+
+.success-card__quote-mark {
+  font-style: normal;
+  font-weight: 800;
+  font-size: var(--text-2xl);
+  line-height: 0;
+  color: var(--blue-light);
+  margin-right: 2px;
+  vertical-align: -6px;
+}
+
+/* CLOSING CTA */
+.reviews-cta {
+  padding: var(--space-32) 0;
+  background: var(--black);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.reviews-cta::before {
+  content: '';
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(155, 202, 242, 0.14) 0%, transparent 70%);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.reviews-cta__badge {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: #f59e0b;
+  font-size: var(--text-sm);
+  margin-bottom: var(--space-4);
+}
+
+.reviews-cta__title {
+  position: relative;
+  z-index: 1;
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--white);
+  margin-bottom: var(--space-4);
+}
+
+.reviews-cta__subtitle {
+  position: relative;
+  z-index: 1;
+  font-size: var(--text-lg);
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 520px;
+  margin: 0 auto var(--space-8);
+}
+
+.reviews-cta__actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.reviews-cta__actions a {
+  text-decoration: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .success-stories__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Dark mode ───────────────────────────────────────────────── */
+/* The closing CTA is dark by design, matching the homepage CTA banner. */
+[data-theme="dark"] .reviews-cta {
+  --black: #0d0d0d;
+  --white: #ffffff;
+}

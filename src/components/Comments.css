@@ -1,8 +1,30 @@
 /* ── Compact comments panel (lives under the episode list) ── */
 .cm {
-  border-top: 1px solid var(--border, #e2e8f0);
   margin-top: 8px;
-  padding-top: 12px;
+}
+
+/* The old divider line above "Komentarze" doubles as the resize handle */
+.cm__resize-handle {
+  height: 9px;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.cm__resize-handle::before {
+  content: '';
+  width: 100%;
+  height: 1px;
+  background: var(--border, #e2e8f0);
+  transition: background 0.15s, height 0.15s;
+}
+
+.cm__resize-handle:hover::before,
+.cm__resize-handle--active::before {
+  background: var(--text-secondary, #94a3b8);
+  height: 2px;
 }
 
 .cm__bar {
@@ -149,6 +171,23 @@
 .cm__list {
   display: flex;
   flex-direction: column;
+  max-height: 32vh; /* ~40% of the .course-player__sidebar's 80vh cap */
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.cm__list::-webkit-scrollbar {
+  width: 6px;
+}
+.cm__list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.cm__list::-webkit-scrollbar-thumb {
+  background: var(--border, #e2e8f0);
+  border-radius: 99px;
+}
+.cm__list::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary, #94a3b8);
 }
 
 .cm-item {

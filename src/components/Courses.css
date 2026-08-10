@@ -349,6 +349,7 @@
   display: flex;
   flex-direction: column;
   max-height: 80vh;
+  align-self: start;
 }
 
 .playlist-header {
@@ -365,6 +366,8 @@
 
 .playlist-modules {
   overflow-y: auto;
+  /* max-height is set explicitly by the comments drag handle (Comments.tsx);
+     no CSS min/max needed here — that would fight with the JS-driven value. */
 }
 
 .module {

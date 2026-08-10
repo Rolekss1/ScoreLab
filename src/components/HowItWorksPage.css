@@ -331,6 +331,47 @@
 }
 
 
+/* RESULTS SECTION */
+.results-section {
+  padding: 100px 0;
+  background: var(--surface-alt);
+}
+
+.results__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  margin-top: var(--space-12);
+}
+
+.results-stat {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-8) var(--space-6);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.results-stat:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.06);
+}
+
+.results-stat__value {
+  font-size: var(--text-4xl);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--black);
+  margin-bottom: var(--space-2);
+}
+
+.results-stat__label {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
 /* AI EXAM GENERATOR SECTION */
 .ai-generator-section {
   padding: 120px 0;
@@ -502,6 +543,10 @@
   .ai-content,
   .bridge-content {
     grid-template-columns: 1fr;
+  }
+
+  .results__grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .mission-visual {
